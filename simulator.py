@@ -560,16 +560,17 @@ def generate_fix_dataset_by_config(config):
 
 
 if __name__ == "__main__":
+    SIM_DIR = "./"
     def gen(db_name, modify={}):
         print("Starting %s db .." % (db_name))
         sample_config = {
-            "noisy_path": "/home/alvinsun/Documents/Code/PhD/caric/MRC-3vG-CARIC/data/3vG_db/caric_20170623_data/sim/" + db_name + "/ifg_fr",
+            "noisy_path": SIM_DIR + db_name + "/ifg_fr",
             "noisy_ext": ".noisy",
-            "rslc_path": "/home/alvinsun/Documents/Code/PhD/caric/MRC-3vG-CARIC/data/3vG_db/caric_20170623_data/sim/" + db_name + "/ifg_fr",
+            "rslc_path": SIM_DIR + db_name + "/ifg_fr",
             "rslc_ext": ".rslc",
-            "filt_path": "/home/alvinsun/Documents/Code/PhD/caric/MRC-3vG-CARIC/data/3vG_db/caric_20170623_data/sim/" + db_name + "/ifg_fr",
+            "filt_path": SIM_DIR + db_name + "/ifg_fr",
             "filt_ext": ".filt",
-            "coh_path": "/home/alvinsun/Documents/Code/PhD/caric/MRC-3vG-CARIC/data/3vG_db/caric_20170623_data/sim/" + db_name + "/ifg_fr",
+            "coh_path": SIM_DIR + db_name + "/ifg_fr",
             "coh_ext": ".filt.coh",
             "width": 1000,
             "height": 1000,
@@ -950,7 +951,7 @@ if __name__ == "__main__":
         },
         "db_name": "S3-FH-FS-Test"
     }])
-
+    
     with concurrent.futures.ProcessPoolExecutor(max_workers=9) as executor:
         for _, _ in zip(dbs, executor.map(concurrent_wrapper, dbs)):
             print("Done")

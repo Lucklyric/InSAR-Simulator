@@ -12,7 +12,22 @@ from scipy.ndimage import gaussian_filter as gauss_filt
 from data_utils_3vG import writeFloat, writeFloatComplex, writeShortComplex
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
+def normalize_slc_by_tanhmz(img, norm=False):
+    phase = np.angle(img)
+    points = img
+    a = np.abs(points)
+    shape = a.shape
+    a = a.flatten()
+    # a = a**0.15
+    mad = np.median(np.abs(a - np.median(a)))
+    mz = 0.6745 * ((a - np.median(a)) / mad)
+    mz = (np.tanh(mz / 7) + 1) / 2
+    if norm:
+        mz = (mz - mz.min()) / (mz.max() - mz.min())
+    mz = mz.reshape(shape)
+    return mz * np.exp(1j * phase)
 
 def wrap(x):
     return np.angle(np.exp(1j * x))
@@ -493,7 +508,6 @@ def generate_fix_dataset_v3(num_of_samples=300, height=1000, width=1000, config=
 
 def generate_fix_dataset_by_config(config):
     import os
-    from utils.data_utils import normalize_slc_by_tanhmz
     if not os.path.exists(config['noisy_path']):
         os.makedirs(config['noisy_path'])
     num_of_samples = config["num_of_samples"]
@@ -560,7 +574,10 @@ def generate_fix_dataset_by_config(config):
 
 
 if __name__ == "__main__":
-    SIM_DIR = "./"
+    SIM_DIR = "./sim_data/"
+
+    os.makedirs(SIM_DIR, exist_ok=True)
+
     def gen(db_name, modify={}):
         print("Starting %s db .." % (db_name))
         sample_config = {

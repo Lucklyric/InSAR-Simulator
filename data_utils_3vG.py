@@ -9,8 +9,6 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-from utils.data_utils import saturate_outlier
-
 
 def readShortComplex(fileName, width=1):
     return np.fromfile(fileName, '>i2').astype(np.float).view(np.complex).reshape(-1, width)

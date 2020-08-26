@@ -135,6 +135,7 @@ class IfgSim():
     self.signal_polygons = []
     self.signal_buildings = []
     self.signal_faults = []
+    self.signal_band = []
     amp = gauss_filt(np.random.rayleigh(self.rayleigh_scale,(self.height,self.width)),10)
     self.amp1 = amp.copy()
     self.amp2 = amp.copy()
@@ -269,7 +270,10 @@ class IfgSim():
     mask = generate_band_mask(self.width,self.height,thickness)
     self.amp1[mask] = amplitude
     self.amp2[mask] = amplitude
-
+  
+  def add_phase_strip(self, amp_scale=1, thickness=1):
+    mask = generate_band_mask(self.width,self.height,thickness)
+    self.signal_band.append((mask, amp_scale))
 
   def add_n_amp_stripes(self, thickness=1, nps=5):
     """
@@ -280,6 +284,10 @@ class IfgSim():
     for i in range(nps):
       self.add_amp_stripe(thickness)
 
+  def add_n_phase_stripes(self, thickness=1, nps=5, amp_range=[-1, 1]):
+    amps = np.random.uniform(amp_range[0], amp_range[1], nps)
+    for i in range(nps):
+      self.add_phase_strip(amps[i], thickness)
 
   def compile(self):
     """ takes all the model parameters and generates the signals in the amplitude and phase based on them
@@ -311,6 +319,9 @@ class IfgSim():
         tmp = np.transpose(tmp)
       self.signal += tmp
 
+    for params in self.signal_band:
+      self.signal[params[0]] += params[1]
+
     # then add the buildings
     vacant_lots = np.ones((self.height,self.width)).astype(np.bool)
     for params in sorted(self.signal_buildings):
@@ -336,7 +347,7 @@ class IfgSim():
     self.ifg_noisy = (self.slc1+self.noise1+self.noise12)*np.conj(self.slc2+self.noise2+self.noise12)
 
 
-def get_coh_dict(amp_range=[0.0,10.0,1000],sigma=0.2,sigma_correlated=0.0,N=100000):
+def get_coh_dict(amp_range=[0.0,10.0,10000],sigma=0.2,sigma_correlated=0.0,N=100000):
   indices = np.arange(amp_range[2])
   amps = indices*(amp_range[1]-amp_range[0])/(amp_range[2]-1.)+amp_range[0]
   cohs = []
@@ -346,7 +357,7 @@ def get_coh_dict(amp_range=[0.0,10.0,1000],sigma=0.2,sigma_correlated=0.0,N=1000
     noise12 = 0.0 if sigma_correlated==0 else np.random.normal(0, sigma_correlated, N) + 1j*np.random.normal(0, sigma_correlated, N)
     slc1 = amp*np.exp(1j*1) + noise1 + noise12
     slc2 = amp*np.exp(1j*1) + noise2 + noise12
-    cohs.append(np.abs(np.sum(slc1*slc2)/np.sqrt(np.sum(np.abs(slc1)**2.)*np.sum(np.abs(slc2)**2.))))
+    cohs.append(np.abs(np.sum(slc1*np.conj(slc2))/np.sqrt(np.sum(np.abs(slc1)**2.)*np.sum(np.abs(slc2)**2.))))
   cohs = np.array(cohs)
   return cohs, amps
 
@@ -384,3 +395,4 @@ def example_coh():
   plt.figure(); plt.imshow(np.abs(sim.ifg),interpolation="None"); plt.colorbar()
   plt.figure(); plt.imshow(np.abs(sim.ifg_noisy),interpolation="None"); plt.colorbar()
   plt.figure(); plt.imshow(sim_cohs,interpolation="None",cmap="Greys_r"); plt.colorbar()
+

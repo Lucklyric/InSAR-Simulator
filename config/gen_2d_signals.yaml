@@ -1,0 +1,9 @@
+seed: 1234
+samples: 10
+workers: 3
+height: 512
+width: 512
+processing_dir: './processing'
+hydra:
+  run:
+    dir: ${processing_dir}

@@ -594,8 +594,8 @@ if __name__ == "__main__":
             "filt_ext": ".filt",
             "coh_path": SIM_DIR + db_name + "/ifg_fr",
             "coh_ext": ".filt.coh",
-            "width": 300,
-            "height": 300,
+            "width": 1000,
+            "height": 1000,
             "num_of_samples": 50,
             "sigma": 0.1,
             "rayleigh_scale": 0.9,
@@ -633,28 +633,347 @@ if __name__ == "__main__":
 
     dbs = [{
         "modify": {
-            "num_of_samples": 150,
+            "sigma": 0.1,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-Flow-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-Flow-NS-Test"
+    }, {
+        "modify": {
             "sigma": 0.1,
             "type_amp_stripes": [{
                 "thick": 3,
                 "num": 1,
-                'scale': 0.1,
+                'scale': 0.1
             }]
         },
         "db_name": "S1-Flow-FS-Train"
     }, {
         "modify": {
-            "num_of_samples": 20,
             "sigma": 0.1,
             "type_amp_stripes": [{
                 "thick": 3,
                 "num": 1,
-                'scale': 0.1,
+                'scale': 0.1
             }]
         },
         "db_name": "S1-Flow-FS-Test"
-    } ]
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-Flow-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-Flow-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-Flow-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-Flow-FS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-Flow-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-Flow-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-Flow-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-Flow-FS-Test"
+    }]
+    # dbs = []
+    dbs.extend([{
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-FM-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-FM-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S1-FM-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S1-FM-FS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-FM-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-FM-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-FM-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-FM-FS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-FM-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-FM-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-FM-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -20,
+            "max_bubble_amp": 20,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-FM-FS-Test"
+    }])
+
+    # dbs = []
+    dbs.extend([{
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-FH-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S1-FH-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S1-FH-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.1,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S1-FH-FS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-FH-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S2-FH-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-FH-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.2,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S2-FH-FS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-FH-NS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": []
+        },
+        "db_name": "S3-FH-NS-Test"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-FH-FS-Train"
+    }, {
+        "modify": {
+            "sigma": 0.3,
+            "min_bubble_amp": -40,
+            "max_bubble_amp": 40,
+            "type_amp_stripes": [{
+                "thick": 3,
+                "num": 1,
+                'scale': 0.1
+            }]
+        },
+        "db_name": "S3-FH-FS-Test"
+    }])
     
-    with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=9) as executor:
         for _, _ in zip(dbs, executor.map(concurrent_wrapper, dbs)):
             print("Done")

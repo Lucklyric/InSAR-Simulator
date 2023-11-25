@@ -90,8 +90,8 @@ class IfgSim():
         self.height = height
         self.rayleigh_scale = rayleigh_scale
         self.x, self.y = np.meshgrid(range(self.width), range(self.height))
-        self.x = self.x.astype(np.float)
-        self.y = self.y.astype(np.float)
+        self.x = self.x.astype(float)
+        self.y = self.y.astype(float)
         self.signal = np.zeros((height, width))
         self.signal_gauss_bubbles = []
         self.signal_buildings = []
@@ -105,11 +105,11 @@ class IfgSim():
         self.amp1 = amp.copy()
         self.amp2 = amp.copy()
         self.slc1 = np.exp(1j * np.zeros((height, width)))
-        self.slc2 = np.zeros((height, width)).astype(np.complex)
-        self.noise1 = np.zeros((height, width)).astype(np.complex)
-        self.noise2 = np.zeros((height, width)).astype(np.complex)
-        self.ifg = np.zeros((height, width)).astype(np.complex)
-        self.noisy_ifg = np.zeros((height, width)).astype(np.complex)
+        self.slc2 = np.zeros((height, width)).astype(complex)
+        self.noise1 = np.zeros((height, width)).astype(complex)
+        self.noise2 = np.zeros((height, width)).astype(complex)
+        self.ifg = np.zeros((height, width)).astype(complex)
+        self.noisy_ifg = np.zeros((height, width)).astype(complex)
 
     def add_gauss_bubble(self, sigma_range=[20, 300], amp_range=[-1, 1]):
         """
@@ -196,7 +196,7 @@ class IfgSim():
             self.signal += eval_2d_gauss(self.x, self.y, params)
 
         # then add the buildings
-        vacant_lots = np.ones((self.height, self.width)).astype(np.bool)
+        vacant_lots = np.ones((self.height, self.width)).astype(bool)
         for params in sorted(self.signal_buildings):
             _, amp, w, h, d, px, py = params
             print(params)
@@ -264,7 +264,7 @@ def get_coh_dict(amp_range=[0.0, 10.0, 1000], sigma=0.2, N=100000):
 
 
 def get_coherence(amps, cohs, amp_range=[0.0, 10.0, 10000]):
-    indices = ((amps - amp_range[0]) * (amp_range[2] - 1.) / (amp_range[1] - amp_range[0])).astype(np.int)
+    indices = ((amps - amp_range[0]) * (amp_range[2] - 1.) / (amp_range[1] - amp_range[0])).astype(int)
     return cohs[indices]
 
 

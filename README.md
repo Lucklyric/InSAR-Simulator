@@ -5,3 +5,6 @@ This Simulator is used for paper **"DeepInSAR: A Deep Learning Framework for SAR
 
 
 
+```
+python3 simulator.py
+```

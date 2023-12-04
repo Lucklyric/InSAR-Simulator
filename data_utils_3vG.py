@@ -11,20 +11,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def readShortComplex(fileName, width=1):
-    return np.fromfile(fileName, '>i2').astype(np.float).view(np.complex).reshape(-1, width)
+    return np.fromfile(fileName, '>i2').astype(float).view(complex).reshape(-1, width)
 
 
 def readFloatComplex(fileName, width=1):
-    return np.fromfile(fileName, '>c8').astype(np.complex).reshape(-1, width)
+    return np.fromfile(fileName, '>c8').astype(complex).reshape(-1, width)
 
 
 def readFloat(fileName, width=1):
-    return np.fromfile(fileName, '>f4').astype(np.float).reshape(-1, width)
+    return np.fromfile(fileName, '>f4').astype(float).reshape(-1, width)
 
 
 def writeShortComplex(fileName, data):
     out_file = open(fileName, 'wb')
-    data.copy().view(np.float).astype('>i2').tofile(out_file)
+    data.copy().view(float).astype('>i2').tofile(out_file)
     out_file.close()
 
 
@@ -55,7 +55,7 @@ def readFloatComplexRandomPathces(fileName, width=1, num_sample=1, patch_size=1,
             img = []
             for p_row in range(patch_size):
                 fin.seek(8 * (width * (row + p_row) + col))
-                img.append(np.frombuffer(fin.read(8 * patch_size), dtype=">c8").astype(np.complex))
+                img.append(np.frombuffer(fin.read(8 * patch_size), dtype=">c8").astype(complex))
             patches.append(np.reshape(img, [patch_size, patch_size]))
     return patches, rows, cols, height
 
@@ -75,7 +75,7 @@ def readShortFloatComplexRandomPathces(fileName, width=1, num_sample=1, patch_si
             img = []
             for p_row in range(patch_size):
                 fin.seek(4 * (width * (row + p_row) + col))
-                img.append(np.frombuffer(fin.read(4 * patch_size), dtype=">i2").astype(np.float).view(np.complex))
+                img.append(np.frombuffer(fin.read(4 * patch_size), dtype=">i2").astype(float).view(complex))
             patches.append(np.reshape(img, [patch_size, patch_size]))
     return patches, rows, cols, height
 
@@ -93,7 +93,7 @@ def readFloatRandomPathces(fileName, width=1, num_sample=1, patch_size=1, rows=N
             img = []
             for p_row in range(patch_size):
                 fin.seek(4 * (width * (row + p_row) + col))
-                img.append(np.frombuffer(fin.read(4 * patch_size), dtype=">f4").astype(np.float))
+                img.append(np.frombuffer(fin.read(4 * patch_size), dtype=">f4").astype(float))
             patches.append(np.reshape(img, [patch_size, patch_size]))
     return patches, rows, cols, height
 

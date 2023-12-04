@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+
 def normalize_slc_by_tanhmz(img, norm=False):
     phase = np.angle(img)
     points = img
@@ -65,24 +66,25 @@ def generate_band_mask(width, height, thickness=1):
 
 
 class IfgSim():
-    """stores simulated data with and without noise and allows to add specific types of signals
-  Attributes:
-    width and height:
-    rayleigh_scale: all amplitudes are randomly drawn according to this parameter
-    signal_gauss_bubbles: the phase signal
-    signal: the phase signal
-    signal_buildings: the phase signal model parameters
-    signal_faults: the phase signal model parameters
-    signal: the phase signal model parameters
-    amp1: the underlying amplitude of slc1
-    amp2: the underlying amplitude of slc2
-    slc1: a phasor of zero phase and amp1 amplitude
-    slc2: a phasor of signal phase and amp2 amplitude
-    noise1: complex normal gaussian added to slc1
-    noise2: complex normal gaussian added to slc2
-    ifg: ifg = (slc1+noise1)*np.conj(slc2+noise2)
-    x,y: 2D arrays with the x and y indices
-  """
+    """
+    stores simulated data with and without noise and allows to add specific types of signals
+    Attributes:
+        width and height:
+        rayleigh_scale: all amplitudes are randomly drawn according to this parameter
+        signal_gauss_bubbles: the phase signal
+        signal: the phase signal
+        signal_buildings: the phase signal model parameters
+        signal_faults: the phase signal model parameters
+        signal: the phase signal model parameters
+        amp1: the underlying amplitude of slc1
+        amp2: the underlying amplitude of slc2
+        slc1: a phasor of zero phase and amp1 amplitude
+        slc2: a phasor of signal phase and amp2 amplitude
+        noise1: complex normal gaussian added to slc1
+        noise2: complex normal gaussian added to slc2
+        ifg: ifg = (slc1+noise1)*np.conj(slc2+noise2)
+        x,y: 2D arrays with the x and y indices
+    """
 
     def __init__(self, width, height, rayleigh_scale=1.0, amp_rayleigh_scale=0.3):
         np.random.seed(np.random.randint(1, 1000000 + 1))
@@ -113,9 +115,9 @@ class IfgSim():
 
     def add_gauss_bubble(self, sigma_range=[20, 300], amp_range=[-1, 1]):
         """
-    :param sigma_range: the range of spatial scales for the gaussians
-    :param amp_range: the range of amplitudes for the gaussians
-    """
+        :param sigma_range: the range of spatial scales for the gaussians
+        :param amp_range: the range of amplitudes for the gaussians
+        """
         amp = (np.random.random() * (amp_range[1] - amp_range[0]) + amp_range[0])
         x_mean = float(np.random.randint(int(0), int(self.width - 1)))
         y_mean = float(np.random.randint(int(0), int(self.height - 1)))
@@ -126,19 +128,19 @@ class IfgSim():
 
     def add_n_gauss_bubbles(self, sigma_range=[20, 300], amp_range=[-1, 1], nps=100):
         """
-    :param sigma_range: the range of spatial scales for the gaussians
-    :param amp_range: the range of amplitudes for the gaussians
-    :param nps: number of random gaussians
-    """
+        :param sigma_range: the range of spatial scales for the gaussians
+        :param amp_range: the range of amplitudes for the gaussians
+        :param nps: number of random gaussians
+        """
         for i in range(nps):
             self.add_gauss_bubble(sigma_range, amp_range)
 
     def add_building(self, width_range=[10, 100], height_range=[10, 100], depth_factor=0.2):
         """
-    :param width_range: range of wedge widths 
-    :param height_range: range of wedge heights
-    :param depth_factor: the height of the building is proportional to the width of the wedge by this factor
-    """
+        :param width_range: range of wedge widths 
+        :param height_range: range of wedge heights
+        :param depth_factor: the height of the building is proportional to the width of the wedge by this factor
+        """
         w = (np.random.random() * (width_range[1] - width_range[0]) + width_range[0])
         h = (np.random.random() * (height_range[1] - height_range[0]) + height_range[0])
         d = w * depth_factor
@@ -149,18 +151,18 @@ class IfgSim():
 
     def add_n_buildings(self, width_range=[10, 100], height_range=[10, 100], depth_factor=0.2, nps=100):
         """
-    :param width_range: range of wedge widths 
-    :param height_range: range of wedge heights
-    :param depth_factor: the height of the building is proportional to the width of the wedge by this factor
-    :param nps: number of buildings to add 
-    """
+        :param width_range: range of wedge widths 
+        :param height_range: range of wedge heights
+        :param depth_factor: the height of the building is proportional to the width of the wedge by this factor
+        :param nps: number of buildings to add 
+        """
         for i in range(nps):
             self.add_building(width_range, height_range, depth_factor)
 
     def add_amp_stripe(self, thickness=1, rayleigh_scale=0.9):
         """ alters the amplitude in a band region (excluding buildings)
-    :param thickness: approximate thickness of the bands
-    """
+        :param thickness: approximate thickness of the bands
+        """
         # amplitude = np.random.rayleigh(self.rayleigh_scale)
         amplitude = np.random.rayleigh(rayleigh_scale)
         mask = generate_band_mask(self.width, self.height, thickness)
@@ -169,8 +171,8 @@ class IfgSim():
 
     def add_amp_stripe_hard(self, thickness=1, rayleigh_scale=0.9):
         """ alters the amplitude in a band region (excluding buildings)
-    :param thickness: approximate thickness of the bands
-    """
+        :param thickness: approximate thickness of the bands
+        """
         # amplitude = np.random.rayleigh(self.rayleigh_scale)
         amplitude = rayleigh_scale
         mask = generate_band_mask(self.width, self.height, thickness)
@@ -179,16 +181,17 @@ class IfgSim():
 
     def add_n_amp_stripes(self, thickness=1, nps=5, rayleigh_scale=0.9):
         """
-    :param thickness: approximate thickness of the bands 
-    :param amplitude: new amplitude in the bands
-    :param nps: number of bands to add
-    """
+        :param thickness: approximate thickness of the bands 
+        :param amplitude: new amplitude in the bands
+        :param nps: number of bands to add
+        """
         for i in range(nps):
             self.add_amp_stripe_hard(thickness, rayleigh_scale=rayleigh_scale)
 
     def compile(self):
-        """ takes all the model parameters and generates the signals in the amplitude and phase based on them
-    """
+        """
+        takes all the model parameters and generates the signals in the amplitude and phase based on them
+        """
 
         # first add the gaussian bubbles
         self.signal = np.zeros((self.height, self.width))
@@ -213,9 +216,47 @@ class IfgSim():
 
             vacant_lots = (vacant_lots) & (cur_building_mask == False)
 
+    def itoh_condition(self, phase_array):
+        unwrapped = np.zeros_like(phase_array)
+        unwrapped[0] = phase_array[0]
+
+        for i in range(1, len(phase_array)):
+            delta = phase_array[i] - phase_array[i - 1]
+            if delta > np.pi:
+                unwrapped[i] = unwrapped[i - 1] + delta - 2 * np.pi
+            elif delta < -np.pi:
+                unwrapped[i] = unwrapped[i - 1] + delta + 2 * np.pi
+            else:
+                unwrapped[i] = unwrapped[i - 1] + delta
+
+        return unwrapped
+
+    def unwrap(self, phase_array_2d):
+        phase_array_2d = np.angle(phase_array_2d)
+        # Unwrap horizontally (row-wise)
+        unwrapped_range = np.zeros_like(phase_array_2d)
+        for i in range(phase_array_2d.shape[0]):
+            unwrapped_range[i, :] = self.itoh_condition(phase_array_2d[i, :])
+
+        # Unwrap vertically (column-wise)
+        unwrapped_azimuth = np.zeros_like(phase_array_2d)
+        for j in range(phase_array_2d.shape[1]):
+            unwrapped_azimuth[:, j] = self.itoh_condition(phase_array_2d[:, j])
+
+        # Unwrap 2D (both horizontally and vertically)
+        unwrapped_2d = np.zeros_like(phase_array_2d)
+        for i in range(phase_array_2d.shape[0]):
+            unwrapped_2d[i, :] = self.itoh_condition(unwrapped_range[i, :])
+        for j in range(phase_array_2d.shape[1]):
+            unwrapped_2d[:, j] = self.itoh_condition(unwrapped_2d[:, j])
+
+        return unwrapped_range, unwrapped_azimuth, unwrapped_2d
+
+
     def update(self, sigma=0.2):
-        """ combines the simulated amplitudes and phases with a constant amount of noise to be added to each slc pixel
-    """
+        """ 
+        combines the simulated amplitudes and phases with a constant amount of noise to be added to each slc pixel
+        """
         self.compile()
         self.slc1 = self.amp1 * self.slc1
         self.slc2 = self.amp2 * np.exp(1j * (self.signal))
@@ -568,7 +609,16 @@ def generate_fix_dataset_by_config(config):
         writeFloatComplex(filename, sim.ifg_noisy)
 
         filename = "%s/%s_%s%s" % (config['filt_path'], slc1_name, slc2_name, config['filt_ext'])
+
         plt.imsave("%s.png" % filename, np.angle(sim.ifg), cmap="jet")
+        np.save('%s.npy' % filename, np.angle(sim.ifg))
+        ranged, azimuth, unwrapped = sim.unwrap(sim.ifg)
+        np.save('%s_range.npy' % filename, ranged)
+        np.save('%s_azimuth.npy' % filename, azimuth)
+        np.save('%s_unwrapped.npy' % filename, unwrapped)
+        plt.imsave("%s_range.png" % filename, ranged, cmap="jet")
+        plt.imsave("%s_azimuth.png" % filename, azimuth, cmap="jet")
+        plt.imsave("%s_unwrapped.png" % filename, unwrapped, cmap="jet")
         # plt.imsave("%s_amp.png" % filename, np.abs(sim.ifg), cmap="gray")
         writeFloatComplex(filename, sim.ifg)
 
@@ -589,9 +639,9 @@ if __name__ == "__main__":
             "filt_ext": ".filt",
             "coh_path": SIM_DIR + db_name + "/ifg_fr",
             "coh_ext": ".filt.coh",
-            "width": 1000,
-            "height": 1000,
-            "num_of_samples": 50,
+            "width": 512,
+            "height": 512,
+            "num_of_samples": 10,
             "sigma": 0.1,
             "rayleigh_scale": 0.9,
             "min_b_w": 10,
